@@ -1,9 +1,10 @@
 import { useGSAP } from "@gsap/react";
 import { Box, Typography } from "@mui/material";
 import gsap from "gsap";
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import second from "../../../assets/img/2.webp";
+import mansionview from "../../../assets/audio/mansion-view.mp3";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,6 +12,37 @@ const Second = () => {
   const containerRef = useRef(null);
   const contentRef = useRef(null);
   const imgRef = useRef(null);
+  const audioRef = useRef(new Audio(mansionview)); // Audio reference
+
+  useEffect(() => {
+    const playAudio = () => {
+      if (audioRef.current.paused) {
+        audioRef.current
+          .play()
+          .catch((err) => console.error("Error playing audio:", err));
+      }
+    };
+
+    const pauseAudio = () => {
+      if (!audioRef.current.paused) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0; // Reset audio
+      }
+    };
+
+    const scrollTrigger = ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top top", // When the box reaches the top
+      end: "+=100", // Short trigger range
+      onEnter: playAudio,
+      onLeaveBack: pauseAudio,
+    });
+
+    return () => {
+      scrollTrigger.kill();
+      pauseAudio(); // Stop audio if component unmounts
+    };
+  }, []);
 
   useGSAP(() => {
     gsap.to(contentRef.current, {
@@ -67,16 +99,14 @@ const Second = () => {
           transform: "translateX(20%)",
         }}
       >
-        {/* Text Section */}
         <Typography
           variant="h2"
           className="jolly-lodger-regular"
-          style={{ fontFamily: "'Jolly Lodger', sans-serif" }}
+          fontFamily={"Jolly Lodger, serif"}
           sx={{
             color: "white",
             fontSize: "4rem",
             padding: "1rem",
-            minWidth: "auto",
           }}
         >
           Through the <span style={{ color: "red" }}>fog</span>, a towering{" "}
@@ -84,20 +114,19 @@ const Second = () => {
           <span style={{ color: "red" }}>silent</span>, and unsettling
         </Typography>
 
-        {/* Image Section */}
         <Box
           sx={{
             display: "flex",
             height: "90vh",
-            width: "80vw", // Adjusted width
-            maxWidth: "900px", // Optional: max width to prevent stretching on large screens
+            width: "80vw",
+            maxWidth: "900px",
             justifyContent: "center",
             alignItems: "center",
             marginLeft: "5rem",
-            padding: "1rem", // Add padding to create space between image and container edges
+            padding: "1rem",
             overflow: "hidden",
-            borderRadius: "10px", // Optional: rounded corners for the image box
-            boxShadow: "0 4px 8px rgba(0,0,0,0.5)", // Optional: shadow effect
+            borderRadius: "10px",
+            boxShadow: "0 4px 8px rgba(0,0,0,0.5)",
           }}
         >
           <img
@@ -106,9 +135,9 @@ const Second = () => {
             alt="Haunted Mansion"
             style={{
               objectFit: "cover",
-              width: "80%", // Ensures image covers the width of the box
-              height: "70%", // Ensures image covers the height of the box
-              borderRadius: "10px", // Optional: rounded corners for the image
+              width: "80%",
+              height: "70%",
+              borderRadius: "10px",
               transition: "transform 0.3s ease-out",
             }}
           />

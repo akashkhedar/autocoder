@@ -5,6 +5,7 @@ import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import React, { useRef, useState } from "react";
 import third from "../../../assets/img/3.webp";
+import gateopen from "../../../assets/audio/gate-open.mp3";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -63,6 +64,7 @@ const ButtonWindow = styled(Button)({
 });
 
 const Third = ({ setEntry }) => {
+  const [audio] = useState(new Audio(gateopen));
   const textRef = useRef(null);
   const imgRef = useRef(null);
 
@@ -80,6 +82,10 @@ const Third = ({ setEntry }) => {
         start: "top 80%",
         end: "top 50%",
         scrub: true,
+        onEnter: () => {
+          // Play the audio when the section enters
+          audio.play();
+        },
       },
     });
 
@@ -110,7 +116,7 @@ const Third = ({ setEntry }) => {
       ease: "power2.out",
       scrollTrigger: {
         trigger: ".choice-third",
-        start: "top 90%",
+        start: "top 90%", // Adjusted start to make it appear later
         end: "top 95%",
         scrub: true,
         onLeave: () => {

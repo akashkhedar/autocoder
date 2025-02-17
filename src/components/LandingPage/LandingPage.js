@@ -33,6 +33,12 @@ const LandingPage = () => {
 
   useEffect(() => {
     setOpen(true);
+    if (videoRef.current) {
+      videoRef.current.muted = true;
+      videoRef.current
+        .play()
+        .catch((err) => console.log("Video autoplay blocked:", err));
+    }
   }, []);
   const handleModalClose = () => {
     const tl = gsap.timeline();
@@ -113,7 +119,6 @@ const LandingPage = () => {
           zIndex: -1,
         }}
         autoPlay
-        muted
         loop
         playsInline
         onLoadedData={() => setVideoLoaded(true)}

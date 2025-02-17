@@ -2,17 +2,19 @@ import { Box } from "@mui/material";
 import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import audio from "../../../assets/audio/jumpscare.mp3";
+import audioFile from "../../../assets/audio/jumpscare.mp3";
 import JumpscareGIF from "../../../assets/img/jumpscare.gif";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const Jumpscare = () => {
-  const audioRef = useRef(new Audio(audio)); // Reference to the audio element
+  const audioRef = useRef(null); // Initialize as null
 
   useEffect(() => {
+    audioRef.current = new Audio(audioFile); // Assign new audio instance on mount
+
     const playAudio = () => {
-      if (audioRef.current?.paused) {
+      if (audioRef.current && audioRef.current.paused) {
         audioRef.current.play().catch((err) => {
           console.error("Error playing audio:", err);
         });
@@ -20,7 +22,7 @@ const Jumpscare = () => {
     };
 
     const pauseAudio = () => {
-      if (!audioRef.current.paused) {
+      if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.currentTime = 0; // Reset audio to the start
       }
@@ -29,19 +31,20 @@ const Jumpscare = () => {
     // GSAP ScrollTrigger animation setup
     const scrollTrigger = ScrollTrigger.create({
       trigger: ".jumpscareBox",
-      start: "top 80%", // Trigger when the top of the box is 80% into the viewport
-      end: "+=100%", // Trigger ends after scrolling the box height
-      scrub: true, // Smooth scroll effect
-      onEnter: playAudio, // Play audio when entering the trigger zone
-      onLeave: pauseAudio, // Pause audio when leaving the trigger zone
-      onEnterBack: playAudio, // Play again when scrolling back
-      onLeaveBack: pauseAudio, // Pause when scrolling back
+      start: "top 80%",
+      end: "+=100%",
+      scrub: true,
+      onEnter: playAudio,
+      onLeave: pauseAudio,
+      onEnterBack: playAudio,
+      onLeaveBack: pauseAudio,
     });
 
-    // Clean up ScrollTrigger when the component unmounts
+    // Clean up ScrollTrigger and audio on unmount
     return () => {
       scrollTrigger.kill();
-      pauseAudio(); // Stop audio if it’s playing when the component is removed
+      pauseAudio();
+      audioRef.current = null; // Ensure cleanup
     };
   }, []);
 
@@ -58,7 +61,6 @@ const Jumpscare = () => {
         alignItems: "center",
       }}
     >
-      <audio ref={audioRef} src={audio} loop style={{ display: "none" }} />
       <img
         src={JumpscareGIF}
         alt="Jumpscare"

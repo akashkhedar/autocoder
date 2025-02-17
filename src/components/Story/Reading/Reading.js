@@ -61,7 +61,6 @@ const ButtonWindow = styled(Button)({
 
 const Reading = ({ setKitchen }) => {
   const containerRef = useRef(null);
-  const contentRef = useRef(null);
   const imgRef = useRef(null);
   const [open, setOpen] = useState(false);
 
@@ -164,14 +163,22 @@ const Reading = ({ setKitchen }) => {
           style={{ fontFamily: "'Jolly Lodger', sans-serif" }}
           sx={{
             color: "white",
-            fontSize: "7rem",
+            fontSize: "4rem",
             textTransform: "uppercase",
             letterSpacing: "2px",
             textShadow: "2px 2px 5px rgba(255, 0, 0, 0.7)",
           }}
         >
-          <span style={{ color: "red" }}> They spot a note </span>on the fridge,
-          <span style={{ color: "red" }}> its faded ink</span> barely legible.
+          <span style={{ color: "red" }}>
+            {" "}
+            As they unfolded the crumpled note
+          </span>
+          the eerie handwriting seemed to
+          <span style={{ color: "red" }}>
+            {" "}
+            whisper its secrets into the
+          </span>{" "}
+          chilling air.
         </Typography>
       </Box>
 

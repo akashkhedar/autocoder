@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { Box, Typography, Modal, Button } from "@mui/material";
-import eight from "../../../assets/img/7b.webp";
-import { styled } from "@mui/system";
 import { useGSAP } from "@gsap/react";
+import { Box, Typography } from "@mui/material";
 import gsap from "gsap";
+import React, { useState } from "react";
+import eight from "../../../assets/img/7b.webp";
 
 const Note = ({ setEntry }) => {
   const [open, setOpen] = useState(false);

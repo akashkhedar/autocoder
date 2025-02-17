@@ -1,9 +1,10 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import fifth from "../../../assets/img/6a.webp";
+import doorbreak from "../../../assets/audio/door-break.mp3";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,8 +13,16 @@ const Fifth = () => {
   const contentRef = useRef(null);
   const imgRef = useRef(null);
 
-  useGSAP(() => {
-    // Adjusting animation for the text to make sure it appears
+  const audio = new Audio(doorbreak); // Create a new Audio instance
+
+  useEffect(() => {
+    // Play the audio when the component mounts (or adjust when you want to trigger the sound)
+    const playAudio = () => {
+      audio
+        .play()
+        .catch((error) => console.error("Error playing audio:", error));
+    };
+
     gsap.fromTo(
       ".bang",
       {
@@ -23,20 +32,22 @@ const Fifth = () => {
       {
         scale: 1,
         opacity: 1,
-        delay: 1, // Adding a slight delay before the text appears
+        delay: 1,
         ease: "power4.out",
-        duration: 2, // Smooth transition over 2 seconds
+        duration: 2,
+        onStart: playAudio, // Play the audio when the animation starts
       }
     );
 
     gsap.to(contentRef.current, {
-      x: "-30vw", // Moves text slightly left
+      x: "-30vw",
       scrollTrigger: {
         trigger: containerRef.current,
         start: "top top",
-        end: "800%",
+        end: "bottom bottom", // Change the end position to 'bottom bottom' for a smoother transition
         pin: true,
         scrub: true,
+        markers: true, // Optional: Helps visualize the start/end of the scroll animation
       },
     });
 
@@ -57,7 +68,7 @@ const Fifth = () => {
         },
       }
     );
-  });
+  }, [audio]); // Ensures audio is initialized when the component mounts
 
   return (
     <Box
@@ -70,6 +81,7 @@ const Fifth = () => {
         overflow: "hidden",
         backgroundColor: "black",
         justifyContent: "center",
+        position: "relative", // Add position relative to help with scroll pinning
       }}
     >
       <Box
@@ -89,7 +101,7 @@ const Fifth = () => {
           style={{ fontFamily: "Bangers, serif" }}
           sx={{
             color: "white",
-            fontSize: "9vw", // Large text size, slightly smaller than viewport width
+            fontSize: "9vw",
             fontWeight: "bold",
             textAlign: "center",
             textTransform: "uppercase",
