@@ -1,6 +1,5 @@
 import { useGSAP } from "@gsap/react";
-import { Box, Button, Modal, Typography } from "@mui/material";
-import { styled } from "@mui/system";
+import { Typography, Box, Modal, Button, makeStyles } from "@mui/material";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import React, { useRef, useState } from "react";
@@ -63,12 +62,25 @@ const ButtonWindow = styled(Button)({
   },
 });
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 const Third = ({ setEntry }) => {
   const [audio] = useState(new Audio(gateopen));
   const textRef = useRef(null);
   const imgRef = useRef(null);
 
   const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   useGSAP(() => {
@@ -105,6 +117,7 @@ const Third = ({ setEntry }) => {
           start: "top 90%",
           end: "bottom 10%",
           scrub: true,
+          markers: true,
         },
       }
     );
