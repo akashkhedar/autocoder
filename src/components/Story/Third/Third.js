@@ -3,6 +3,7 @@ import { Typography, Box, Modal, Button, makeStyles } from "@mui/material";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import React, { useRef, useState } from "react";
+import { styled } from "@mui/system";
 import third from "../../../assets/img/3.webp";
 import gateopen from "../../../assets/audio/gate-open.mp3";
 
